@@ -1,0 +1,139 @@
+version: "3.8"
+
+services:
+  nordvpn:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    env_file:
+      - docker.env
+    ports:
+      - 8080:8080  # qBittorrent WebUI
+      - 7878:7878  # Radarr WebUI
+      - 8989:8989  # Sonarr WebUI
+      - 8686:8686  # Lidarr WebUI
+      - 9696:9696  # Prowlarr WebUI
+      - 5055:5055  # Overseerr WebUI
+      - 7575:7575  # Homarr WebUI
+    restart: unless-stopped
+    networks:
+      vpn:
+        aliases:
+          - gluetun
+        ipv4_address: 192.168.100.2
+
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    container_name: qbittorrent
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+      - WEBUI_PORT=8080
+    volumes:
+      - F:\media-server\qbittorrent\config:/config
+      - F:\media-server\downloads:/downloads
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+    volumes:
+      - F:\media-server\radarr\config:/config
+      - F:\Plex\Movies:/movies
+      - F:\media-server\downloads:/downloads
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+    volumes:
+      - F:\media-server\sonarr\config:/config
+      - F:\media-server\downloads:/downloads
+      - F:\Plex\TV:/tv
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+    volumes:
+      - F:\media-server\lidarr\config:/config
+      - F:\media-server\downloads:/downloads
+      - F:\Plex\Music:/music
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+  prowlarr:
+    image: linuxserver/prowlarr
+    container_name: prowlarr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+    volumes:
+      - F:\media-server\prowlarr\config:/config
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+  overseerr:
+    image: sctx/overseerr
+    container_name: overseerr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+    volumes:
+      - F:\media-server\overseerr\config:/app/config
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
+    environment:
+      - PUID=1001
+      - PGID=545
+      - TZ=America/New_York
+    volumes:
+      - F:\media-server\homarr\config:/config
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    restart: unless-stopped
+
+networks:
+  vpn:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "192.168.100.0/24"
