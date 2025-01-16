@@ -34,8 +34,8 @@ services:
       - TZ=America/New_York
       - WEBUI_PORT=8080
     volumes:
-      - F:\media-server\qbittorrent\config:/config
-      - F:\media-server\downloads:/downloads
+      - E:\media-server\qbittorrent\config:/config
+      - E:\media-server\downloads:/downloads
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
@@ -49,9 +49,9 @@ services:
       - PGID=545
       - TZ=America/New_York
     volumes:
-      - F:\media-server\radarr\config:/config
-      - F:\Plex\Movies:/movies
-      - F:\media-server\downloads:/downloads
+      - E:\media-server\radarr\config:/config
+      - E:\Plex\Movies:/movies
+      - E:\media-server\downloads:/downloads
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
@@ -65,9 +65,9 @@ services:
       - PGID=545
       - TZ=America/New_York
     volumes:
-      - F:\media-server\sonarr\config:/config
-      - F:\media-server\downloads:/downloads
-      - F:\Plex\TV:/tv
+      - E:\media-server\sonarr\config:/config
+      - E:\media-server\downloads:/downloads
+      - E:\Plex\TV:/tv
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
@@ -81,9 +81,9 @@ services:
       - PGID=545
       - TZ=America/New_York
     volumes:
-      - F:\media-server\lidarr\config:/config
-      - F:\media-server\downloads:/downloads
-      - F:\Plex\Music:/music
+      - E:\media-server\lidarr\config:/config
+      - E:\media-server\downloads:/downloads
+      - E:\Plex\Music:/music
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
@@ -97,7 +97,7 @@ services:
       - PGID=545
       - TZ=America/New_York
     volumes:
-      - F:\media-server\prowlarr\config:/config
+      - E:\media-server\prowlarr\config:/config
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
@@ -111,7 +111,7 @@ services:
       - PGID=545
       - TZ=America/New_York
     volumes:
-      - F:\media-server\overseerr\config:/app/config
+      - E:\media-server\overseerr\config:/app/config
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
@@ -125,7 +125,7 @@ services:
       - PGID=545
       - TZ=America/New_York
     volumes:
-      - F:\media-server\homarr\config:/config
+      - E:\media-server\homarr\config:/config
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
